@@ -10,6 +10,7 @@ namespace BrainGames
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
