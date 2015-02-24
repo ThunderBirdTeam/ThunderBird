@@ -1,0 +1,3 @@
+D:\Telerik\C# Part II\TeamProject\SillySpider\bin\Debug\Game.exe.config
+D:\Telerik\C# Part II\TeamProject\SillySpider\obj\Debug\Game.exe
+D:\Telerik\C# Part II\TeamProject\SillySpider\obj\Debug\Game.pdb
