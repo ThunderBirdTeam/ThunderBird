@@ -77,96 +77,100 @@ __\/ / / / / /
 ___\/ / / / /
 ____\/ / / /");
 
-            // Отпечатване на буболечката
-            PrintOnPosition(bug.x, bug.y, bug.str = "_\\o/_", bug.color = ConsoleColor.Red);
-            PrintOnPosition(bug.x, bug.y + 1, bug.str = "/(_)\\", bug.color = ConsoleColor.Red);
+            // Дефиниране на капка дъжд най-отгоре
+            Symbol newDropTop = new Symbol();
+            newDropTop.color = ConsoleColor.Cyan;
+            newDropTop.x = randomGenerator.Next(0, Console.WindowWidth);
+            newDropTop.y = -1;
+            newDropTop.str = "/";
+            rain.Add(newDropTop);
 
-            // Улавяне на натиснатите клавиши-стрелки
-            // и преместване на буболечката
-            if (Console.KeyAvailable)
+            // Дефиниране на капка дъжд най-отдясно
+            Symbol newDropRight = new Symbol();
+            newDropRight.color = ConsoleColor.Cyan;
+            newDropRight.x = Console.WindowWidth - 1;
+            newDropRight.y = randomGenerator.Next(0, Console.WindowHeight);
+            newDropRight.str = "/";
+            rain.Add(newDropRight);
+
+            // Капки
+            List<Symbol> newList = new List<Symbol>();
+            Symbol movingDrop = new Symbol();
+            for (int i = 0; i < rain.Count; i++)
             {
-                ConsoleKeyInfo pressedKey = Console.ReadKey(true);
-                while (Console.KeyAvailable) Console.ReadKey(true);
-                if (pressedKey.Key == ConsoleKey.LeftArrow
-                    && bug.x >= 1)
+                // Преместване на капките
+                if (rain[i].x - 1 >= 1 && rain[i].y + 1 < Console.WindowHeight)
                 {
-                    bug.x--;
+                    movingDrop.x = rain[i].x - 1;
+                    movingDrop.y = rain[i].y + 1;
+                    movingDrop.str = rain[i].str;
+                    movingDrop.color = rain[i].color;
+                    newList.Add(movingDrop);
                 }
-                else if (pressedKey.Key == ConsoleKey.RightArrow
-                    && bug.x < Console.WindowWidth - 5)
+                // Проверка дали някоя капка не ни е удавила
+                if (movingDrop.x >= bug.x + 1
+                    && movingDrop.x <= bug.x + 3
+                    && movingDrop.y >= bug.y
+                    && movingDrop.y <= bug.y + 1)
                 {
-                    bug.x++;
-                }
-                else if (pressedKey.Key == ConsoleKey.UpArrow
-                    && bug.y >= Console.WindowHeight - 12)
-                {
-                    bug.y--;
-                }
-                else if (pressedKey.Key == ConsoleKey.DownArrow
-                    && bug.y < Console.WindowHeight - 3)
-                {
-                    bug.y++;
+                    PrintOnPosition(bug.x, bug.y - 1, bug.str = "~~~ ~ ~", bug.color = ConsoleColor.Blue);
+                    PrintOnPosition(bug.x, bug.y, bug.str = " Drown ", bug.color = ConsoleColor.Blue);
+                    PrintOnPosition(bug.x, bug.y + 1, bug.str = "~ ~ ~~~", bug.color = ConsoleColor.Blue);
+                    Thread.Sleep(2000);
+                    Console.Clear();
+                    newList.Clear();
+                    rain.Clear();
                 }
             }
+            rain = newList;
 
-            // Дъжд
-            else if (!Console.KeyAvailable)
+            // Отпечатване на капките дъжд
+            foreach (Symbol drop in rain)
             {
-                // Дефиниране на капка дъжд най-отгоре
-                Symbol newDropTop = new Symbol();
-                newDropTop.color = ConsoleColor.Cyan;
-                newDropTop.x = randomGenerator.Next(0, Console.WindowWidth);
-                newDropTop.y = -1;
-                newDropTop.str = "/";
-                rain.Add(newDropTop);
+                PrintOnPosition(drop.x, drop.y, drop.str, drop.color);
+            }
 
-                // Дефиниране на капка дъжд най-отдясно
-                Symbol newDropRight = new Symbol();
-                newDropRight.color = ConsoleColor.Cyan;
-                newDropRight.x = Console.WindowWidth - 1;
-                newDropRight.y = randomGenerator.Next(0, Console.WindowHeight);
-                newDropRight.str = "/";
-                rain.Add(newDropRight);
+            for (int i = 0; i < 10; i++)
+            {
+                // Отпечатване на буболечката черна/невидима,
+                // което оправя бъг с отпечатването при преместване
+                PrintOnPosition(bug.x, bug.y, bug.str = @"_\o/_", bug.color = ConsoleColor.Black);
+                PrintOnPosition(bug.x, bug.y + 1, bug.str = @"/(_)\", bug.color = ConsoleColor.Black);
 
-                // Капки
-                List<Symbol> newList = new List<Symbol>();
-                Symbol movingDrop = new Symbol();
-                for (int i = 0; i < rain.Count; i++)
+                // Улавяне на натиснатите клавиши-стрелки
+                // и преместване на буболечката
+                if (Console.KeyAvailable)
                 {
-                    // Преместване на капките
-                    if (rain[i].x - 1 >= 1 && rain[i].y + 1 < Console.WindowHeight)
+                    ConsoleKeyInfo pressedKey = Console.ReadKey(true);
+                    while (Console.KeyAvailable) Console.ReadKey(true);
+                    if (pressedKey.Key == ConsoleKey.LeftArrow
+                        && bug.x >= 1)
                     {
-                        movingDrop.x = rain[i].x - 1;
-                        movingDrop.y = rain[i].y + 1;
-                        movingDrop.str = rain[i].str;
-                        movingDrop.color = rain[i].color;
-                        newList.Add(movingDrop);
+                        bug.x--;
                     }
-                    // Проверка дали някоя капка не ни е удавила
-                    if (movingDrop.x >= bug.x + 1
-                        && movingDrop.x <= bug.x + 3 
-                        && movingDrop.y >= bug.y 
-                        && movingDrop.y <= bug.y + 1)
+                    else if (pressedKey.Key == ConsoleKey.RightArrow
+                        && bug.x < Console.WindowWidth - 5)
                     {
-                        PrintOnPosition(bug.x, bug.y - 1, bug.str = "~~~ ~ ~", bug.color = ConsoleColor.Blue);
-                        PrintOnPosition(bug.x, bug.y, bug.str = " Drown ", bug.color = ConsoleColor.Blue);
-                        PrintOnPosition(bug.x, bug.y + 1, bug.str = "~ ~ ~~~", bug.color = ConsoleColor.Blue);
-                        Thread.Sleep(2000);
-                        Console.Clear();
-                        newList.Clear();
-                        rain.Clear();
+                        bug.x++;
+                    }
+                    else if (pressedKey.Key == ConsoleKey.UpArrow
+                        && bug.y >= Console.WindowHeight - 12)
+                    {
+                        bug.y--;
+                    }
+                    else if (pressedKey.Key == ConsoleKey.DownArrow
+                        && bug.y < Console.WindowHeight - 3)
+                    {
+                        bug.y++;
                     }
                 }
-                rain = newList;
 
-                // Отпечатване на капките дъжд
-                foreach (Symbol drop in rain)
-                {
-                    PrintOnPosition(drop.x, drop.y, drop.str, drop.color);
-                }
+                // Отпечатване на буболечката червена, каквато трябва да бъде
+                PrintOnPosition(bug.x, bug.y, bug.str = @"_\o/_", bug.color = ConsoleColor.Red);
+                PrintOnPosition(bug.x, bug.y + 1, bug.str = @"/(_)\", bug.color = ConsoleColor.Red);
 
                 // Изкуствено забавяне изпълнението на цикъла
-                Thread.Sleep(150);
+                Thread.Sleep(15);
             }
         }
     }
