@@ -40,7 +40,7 @@ new[] {true,  false, true,false,false, true,false, true,false,false,false, true,
 new[] {true,   true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}
 };
 
-           
+
             return mazeLayout;
         }
 

@@ -57,6 +57,8 @@
     <Compile Include="Level1Matrix.cs" />
     <Compile Include="Level2Matrix.cs" />
     <Compile Include="Level3Matrix.cs" />
+    <Compile Include="Level4Matrix.cs" />
+    <Compile Include="Level5Matrix.cs" />
     <Compile Include="Movements.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

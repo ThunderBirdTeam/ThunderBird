@@ -40,10 +40,10 @@ new[] {  true,   true,false, true,false, true,false, true, true, true, true, tru
 new[] {  true,   true, true, true,false, true, true, true,false,false, true,false,false, true, true, true,false, true,false,false,false, true, true, true,false, true, true, true, true, true,false, true, true },
 new[] {  true,   true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true }
                                   };
-           
+
             return mazeLayout;
         }
 
     }
-    }
+}
 
