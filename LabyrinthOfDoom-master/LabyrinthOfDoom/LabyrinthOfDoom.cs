@@ -28,7 +28,7 @@ namespace LabyrinthOfDoom
             Console.WriteLine("      Controllers: \n        Up: W Down: S \n        Left: A Right: D");
             Console.WriteLine("\n\n      Press enter to start:");
             Console.WriteLine("\n\n\n\n\n\n");
-            Console.WriteLine("    Developed by: Svetlin Krastanov");
+            Console.WriteLine("    Developed by: S23vetlin Krastanov");
             Console.SetCursorPosition(15, 16);
             Console.ReadLine();
             Console.Clear();
