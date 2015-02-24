@@ -17,7 +17,8 @@ namespace LabyrinthOfDoom
 
         static void Main()
         {
-            Console.SetWindowSize(60, 36);
+            Console.BufferHeight = Console.WindowHeight = 36;
+            Console.BufferWidth = Console.WindowWidth = 60;
             Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Title = "Labyrinth Of Doom";
@@ -57,7 +58,7 @@ namespace LabyrinthOfDoom
         {
 
 
-            for (int level = 0; level < 4; level++)
+            for (int level = 0; level < 3; level++)
             {
 
                 Console.Write("");
@@ -71,7 +72,7 @@ namespace LabyrinthOfDoom
                 }
                 Console.WriteLine("");
                 //Make maze width Gold
-
+                
                 for (int i = 0; i < mazeLayout.Length; i++)
                 {
                     for (int j = 0; j < mazeLayout[i].Length; j++)
@@ -93,6 +94,7 @@ namespace LabyrinthOfDoom
                             {
                                 Console.Write(mazechar);
                             }
+                            
 
                         }
 

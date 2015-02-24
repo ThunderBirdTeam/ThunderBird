@@ -97,7 +97,7 @@ namespace LabyrinthOfDoom
                 Console.SetCursorPosition(col, row);
                 Console.Write("@");
                 Console.SetCursorPosition(col, row);
-
+               
 
 
                 if (!mazeLayout[row][col] && (col % 4 == 0))
@@ -116,10 +116,35 @@ namespace LabyrinthOfDoom
                     Console.SetCursorPosition(col, row);
 
                 }
-
-
+                //Check if gold is not colectet Exit = No no no
+                if (gold < 400)
+                {
+                    switch (counter)
+                    {
+                        case 0: mazeLayout[26][32] = true;  break;
+                        case 1: mazeLayout[8][31] = true; break;
+                        case 2: mazeLayout[23][33] = true; break;
+                        case 3: mazeLayout[32][28] = true; break;
+                        default:break;
+                            
+                    }
+                }
+                    // Check if gold is colectet exit = yes yes yes
+                else
+                {
+                    switch (counter)
+                    {
+                        case 0: mazeLayout[26][32] = false; break;
+                        case 1: mazeLayout[8][31] = false; break;
+                        case 2: mazeLayout[23][33] = false; break;
+                        case 3: mazeLayout[32][28] = false; break;
+                        default: break;
+                           
+                    }
+                }
+                
                 //Check if the user found exit 
-                if (col == 32 && row == 27 && counter == 0 && gold >= 400)
+                if (col == 32 && row == 27 && counter == 0)
                 {
                     timer.Close();
                     Console.Clear();
@@ -136,7 +161,8 @@ namespace LabyrinthOfDoom
                     Console.Clear();
                     break;
                 }
-                if (col == 31 && row == 9 && counter == 1 && gold > 400)
+                
+                if (col == 31 && row == 9 && counter == 1 )
                 {
                     timer.Close();
                     Console.Clear();
@@ -153,7 +179,7 @@ namespace LabyrinthOfDoom
                     Console.Clear();
                     break;
                 }
-                if (col == 33 && row == 24 && counter == 2 && gold > 400)
+                if (col == 33 && row == 24 && counter == 2)
                 {
                     timer.Close();
                     Console.Clear();
@@ -170,7 +196,7 @@ namespace LabyrinthOfDoom
                     Console.Clear();
                     break;
                 }
-                if (col == 32 && row == 29 && counter == 3 && gold > 400)
+                if (col == 32 && row == 29 && counter == 3)
                 {
                     timer.Close();
                     Console.Clear();
