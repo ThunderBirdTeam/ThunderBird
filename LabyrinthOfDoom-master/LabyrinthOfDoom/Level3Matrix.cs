@@ -5,6 +5,7 @@ namespace LabyrinthOfDoom
     {
         public static bool[][] GetMatrix()
         {
+            //True for each Wall and False for the path
             bool[][] mazeLayout = 
             {
 new[] {true,   true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true},

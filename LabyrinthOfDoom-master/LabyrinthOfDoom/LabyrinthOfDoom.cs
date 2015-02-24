@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LabyrinthOfDoom;
-using System.Diagnostics;
-using System.Timers;
+﻿ using System;
+    using LabyrinthOfDoom;
+    using System.Diagnostics;
+    using System.Timers;
 namespace LabyrinthOfDoom
 {
+   
+
     class LabyrinthOfDoom
     {
 
@@ -58,7 +56,7 @@ namespace LabyrinthOfDoom
         {
 
 
-            for (int level = 0; level < 3; level++)
+            for (int level = 0; level <= 3; level++)
             {
 
                 Console.Write("");

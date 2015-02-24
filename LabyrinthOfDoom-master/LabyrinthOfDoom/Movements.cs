@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.Timers;
+﻿
 namespace LabyrinthOfDoom
 {
+    using System;
+    using System.Diagnostics;
+    using System.Timers;
+
     class Movements
     {
+        //Time for each level
         static Timer timer = new Timer(1000);
         public static int sec = 35;
         public static int time = 0;
+        //Where the cursor should be in begining in each level
         public static int col = 1;
         public static int row = 3;
+        //variable for gold
         public static int gold = 0;
+
+
 
         public static void Move(int counter)
         {
@@ -23,13 +26,10 @@ namespace LabyrinthOfDoom
                 timer.Elapsed += timer_Elapsed;
                 time++;
             }
-
-
             sec = 35;
-
             timer.Start();
 
-
+            //Make mask for movements
             bool[][] mazeLayout = Level1Matrix.GetMatrix();
             switch (counter)
             {
@@ -47,18 +47,11 @@ namespace LabyrinthOfDoom
                 case 3: mazeLayout = Level4Matrix.GetMatrix(); break;
                 default: break;
             }
-
-
             Console.WriteLine("");
-
-
-            Console.SetCursorPosition(col, row);
-
-
             Console.SetCursorPosition(col, row);
             Console.Write("@");
             Console.SetCursorPosition(col, row);
-            //Here it is the controls
+            //Here it is the controls 
             while (true)
             {
                 ConsoleKeyInfo info = Console.ReadKey(true);
@@ -99,12 +92,10 @@ namespace LabyrinthOfDoom
                 Console.SetCursorPosition(col, row);
                
 
-
+                //Print the Colected Gold
                 if (!mazeLayout[row][col] && (col % 4 == 0))
                 {
-
                     gold += 5;
-
                     Console.SetCursorPosition(38, 4);
                     Console.Write("You need at least  ");
                     Console.SetCursorPosition(38, 6);
@@ -112,7 +103,6 @@ namespace LabyrinthOfDoom
                     Console.SetCursorPosition(38, 8);
                     Console.Write("Gold: {0}", gold);
                     Console.SetCursorPosition(38, 10);
-
                     Console.SetCursorPosition(col, row);
 
                 }
@@ -143,7 +133,7 @@ namespace LabyrinthOfDoom
                     }
                 }
                 
-                //Check if the user found exit 
+                //Check if the user found exit on first level
                 if (col == 32 && row == 27 && counter == 0)
                 {
                     timer.Close();
@@ -161,7 +151,7 @@ namespace LabyrinthOfDoom
                     Console.Clear();
                     break;
                 }
-                
+                //Check if the user found exit on second level
                 if (col == 31 && row == 9 && counter == 1 )
                 {
                     timer.Close();
@@ -179,6 +169,7 @@ namespace LabyrinthOfDoom
                     Console.Clear();
                     break;
                 }
+                //Check if the user found exit on third level
                 if (col == 33 && row == 24 && counter == 2)
                 {
                     timer.Close();
@@ -196,11 +187,12 @@ namespace LabyrinthOfDoom
                     Console.Clear();
                     break;
                 }
+                //Check if the user found exit on four level
                 if (col == 32 && row == 29 && counter == 3)
                 {
                     timer.Close();
                     Console.Clear();
-                    Console.WriteLine("\n\n\n\n\n\nYou Found the exit on third level :)");
+                    Console.WriteLine("\n\n\n\n\n\nYou Found the exit on four level :)");
                     Console.WriteLine("Colected gold: {0}", gold);
                     Console.WriteLine("Press Enter to continue");
                     Console.ReadLine();
@@ -212,10 +204,9 @@ namespace LabyrinthOfDoom
 
                     Console.Clear();
 
-
-
                     break;
                 }
+                //If time is 0 return from begining 
                 if (sec == 0)
                 {
                     col = 1;
@@ -224,10 +215,6 @@ namespace LabyrinthOfDoom
                     Console.SetCursorPosition(col, row);
                     Console.Clear();
 
-
-
-
-
                     LabyrinthOfDoom.PrintArray();
 
                 }
@@ -235,7 +222,7 @@ namespace LabyrinthOfDoom
             }
         }
 
-
+        //Make Timer for each level
         private static void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             sec--;
@@ -247,7 +234,7 @@ namespace LabyrinthOfDoom
             }
 
 
-
+            //What happend when time is zero
             if (sec == 0)
             {
 
