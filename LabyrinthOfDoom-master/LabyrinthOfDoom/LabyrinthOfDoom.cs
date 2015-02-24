@@ -4,7 +4,7 @@
     using System.Timers;
 namespace LabyrinthOfDoom
 {
-   
+
 
     class LabyrinthOfDoom
     {
@@ -45,76 +45,42 @@ namespace LabyrinthOfDoom
             Console.Beep(800, 80);
             Console.Clear();
 
-            PrintArray();
-            Console.WriteLine("\n\n\n\n   Yeaaaa You beat the game! \n\n  You should be proud of yourself \n         {0}    :)");
+
+            
+            Movements.Move();
+        
+
+            Movements.PrintBeatTheGame();
+            #region Music
+            Console.Beep(440, 500);
+            Console.Beep(440, 500);
+            Console.Beep(440, 500);
+            Console.Beep(349, 350);
+            Console.Beep(523, 150);
+            Console.Beep(440, 500);
+            Console.Beep(349, 350);
+            Console.Beep(523, 150);
+            Console.Beep(440, 1000);
+            Console.Beep(659, 500);
+            Console.Beep(659, 500);
+            Console.Beep(659, 500);
+            Console.Beep(698, 350);
+            Console.Beep(523, 150);
+            Console.Beep(415, 500);
+            Console.Beep(349, 350);
+            Console.Beep(523, 150);
+            Console.Beep(440, 1000);
+            #endregion
             Console.ReadLine();
         }
 
 
 
-        public static void PrintArray()
-        {
-
-
-            for (int level = 0; level <= 3; level++)
-            {
-
-                Console.Write("");
-                bool[][] mazeLayout = Level1Matrix.GetMatrix();
-                switch (level)
-                {
-                    case 1: mazeLayout = Level2Matrix.GetMatrix(); break;
-                    case 2: mazeLayout = Level3Matrix.GetMatrix(); break;
-                    case 3: mazeLayout = Level4Matrix.GetMatrix(); break;
-                    default: break;
-                }
-                Console.WriteLine("");
-                //Make maze width Gold
-                
-                for (int i = 0; i < mazeLayout.Length; i++)
-                {
-                    for (int j = 0; j < mazeLayout[i].Length; j++)
-                    {
-                        if (mazeLayout[i][j])
-                        {
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            Console.Write(wallchar);
-                        }
-                        else
-                        {
-                            if (!mazeLayout[i][j] && (j % 4 == 0))
-                            {
-                                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                Console.Write("$");
-
-                            }
-                            else
-                            {
-                                Console.Write(mazechar);
-                            }
-                            
-
-                        }
-
-                    }
-                    Console.Write("\n");
-                }
-
-                Console.Beep(800, 100);
-                Console.Beep(1200, 100);
-                Console.Beep(800, 100);
-                Console.Beep(1200, 100);
-                Console.Beep(800, 100);
-                Console.SetWindowSize(60, 40);
-
-                Movements.Move(level);
 
 
 
-            }
 
-        }
+
 
     }
-
 }
