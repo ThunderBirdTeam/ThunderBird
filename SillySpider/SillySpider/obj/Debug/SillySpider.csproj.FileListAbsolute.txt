@@ -1,9 +1,6 @@
-D:\Telerik\C# Part II\TeamProject\SillySpider\bin\Debug\Game.exe.config
-D:\Telerik\C# Part II\TeamProject\SillySpider\obj\Debug\Game.exe
-D:\Telerik\C# Part II\TeamProject\SillySpider\obj\Debug\Game.pdb
 D:\Team ThunderBird\SillySpider\SillySpider\bin\Debug\Game.exe.config
-D:\Team ThunderBird\SillySpider\SillySpider\obj\Debug\Game.exe
-D:\Team ThunderBird\SillySpider\SillySpider\obj\Debug\Game.pdb
 D:\Team ThunderBird\SillySpider\SillySpider\bin\Debug\Game.exe
 D:\Team ThunderBird\SillySpider\SillySpider\bin\Debug\Game.pdb
 D:\Team ThunderBird\SillySpider\SillySpider\obj\Debug\SillySpider.csprojResolveAssemblyReference.cache
+D:\Team ThunderBird\SillySpider\SillySpider\obj\Debug\Game.exe
+D:\Team ThunderBird\SillySpider\SillySpider\obj\Debug\Game.pdb
