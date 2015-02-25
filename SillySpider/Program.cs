@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 
 // Структура за отпечатване на всеки един символ
@@ -51,6 +52,14 @@ class Game
             Console.WriteLine(blue);
             Console.ResetColor();
 
+           
+            StreamReader readerClouds = new StreamReader(@"C:\Users\Alexandrina\Desktop\Clouds.txt");
+            string contentClouds = readerClouds.ReadToEnd();
+            Console.SetCursorPosition(1, 2);
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine(contentClouds);
+            Console.ResetColor();
+
             // Зелена трева
             Console.SetCursorPosition(0, Console.WindowHeight - 1);
             Console.BackgroundColor = ConsoleColor.DarkGreen;
@@ -61,21 +70,9 @@ class Game
             // Декоративни паяжини
             Console.SetCursorPosition(0, Console.WindowHeight - 16);
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(@"
-________/
-_______/\---------------------------------------------------------/
-______/\ \                                                \--+---/\
-_____/\ \ \                                              `/\-+--/\'\
-____/\ \ \ \                                             /`/\+-/\'\'\
-___/\ \ \ \ \                                            -+-    -+-+-
-__/\ \ \ \ \ \                                           \'\/+-\/`/`/
-_/\ \ \ \ \ \ \                                           \/-+--\/`/\
-/\ \ \ \ \ \ \ \                                           --+---\/ /
-\/-/-/-/-/-/-/-/-
-_\/ / / / / / /
-__\/ / / / / /
-___\/ / / / /
-____\/ / / /");
+            StreamReader readerWeb = new StreamReader(@"C:\Users\Alexandrina\Desktop\spiderWeb.txt");
+            string contentWeb = readerWeb.ReadToEnd();
+            Console.WriteLine(contentWeb);
 
             // Дефиниране на капка дъжд най-отгоре
             Symbol newDropTop = new Symbol();
