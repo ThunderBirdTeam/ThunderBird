@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Media;
 using System.Threading;
 
 // Структура за отпечатване на всеки един символ
@@ -24,6 +25,10 @@ class Game
 
     static void Main()
     {
+        // you need to copy the filepath here for your own pc else it won't work
+        SoundPlayer player = new SoundPlayer(@"C:\\Users\Alexandrina\Desktop\storm.wav");
+        player.PlayLooping();
+       
         // Задаване на работното поле
         Console.BufferHeight = Console.WindowHeight = 40;
         Console.BufferWidth = Console.WindowWidth = 70;
@@ -45,6 +50,9 @@ class Game
             // Изчистване на конзолата
             Console.Clear();
 
+            
+            
+
             // Синьо небе
             Console.SetCursorPosition(0, 1);
             Console.BackgroundColor = ConsoleColor.DarkBlue;
@@ -52,7 +60,7 @@ class Game
             Console.WriteLine(blue);
             Console.ResetColor();
 
-           
+            // you need to copy the filepath here for your own pc else it won't work
             StreamReader readerClouds = new StreamReader(@"C:\Users\Alexandrina\Desktop\Clouds.txt");
             string contentClouds = readerClouds.ReadToEnd();
             Console.SetCursorPosition(1, 2);
@@ -68,6 +76,7 @@ class Game
             Console.ResetColor();
 
             // Декоративни паяжини
+            // you need to copy the filepath here for your own pc else it won't work
             Console.SetCursorPosition(0, Console.WindowHeight - 16);
             Console.ForegroundColor = ConsoleColor.White;
             StreamReader readerWeb = new StreamReader(@"C:\Users\Alexandrina\Desktop\spiderWeb.txt");
@@ -111,13 +120,19 @@ class Game
                     && movingDrop.y >= bug.y
                     && movingDrop.y <= bug.y + 1)
                 {
-                    PrintOnPosition(bug.x, bug.y - 1, bug.str = "~~~ ~ ~", bug.color = ConsoleColor.Blue);
-                    PrintOnPosition(bug.x, bug.y, bug.str = " Drown ", bug.color = ConsoleColor.Blue);
-                    PrintOnPosition(bug.x, bug.y + 1, bug.str = "~ ~ ~~~", bug.color = ConsoleColor.Blue);
-                    Thread.Sleep(2000);
+                    // you need to copy the filepath here for your own pc else it won't work
+                    player.Stop();
+                    SoundPlayer playerDied = new SoundPlayer(@"C:\\Users\Alexandrina\Desktop\died.wav");
+                    playerDied.Play();
+
+                    PrintOnPosition(bug.x, bug.y - 1, bug.str = "~ ~ ~~~ ~ ~", bug.color = ConsoleColor.Blue);
+                    PrintOnPosition(bug.x, bug.y, bug.str = " YOU DIED ", bug.color = ConsoleColor.Blue);
+                    PrintOnPosition(bug.x, bug.y + 1, bug.str = "~ ~ ~~~ ~ ~", bug.color = ConsoleColor.Blue);
+                    Thread.Sleep(2050);
                     Console.Clear();
                     newList.Clear();
                     rain.Clear();
+                    player.Play();
                 }
             }
             rain = newList;
