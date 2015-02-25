@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Media;
 using System.Threading;
 
 // Структура за отпечатване на всеки един символ
@@ -23,6 +25,10 @@ class Game
 
     static void Main()
     {
+        // you need to copy the filepath here for your own pc else it won't work
+        SoundPlayer player = new SoundPlayer(@"..\..\..\storm.wav");
+        player.PlayLooping();
+
         // Задаване на работното поле
         Console.BufferHeight = Console.WindowHeight = 40;
         Console.BufferWidth = Console.WindowWidth = 70;
@@ -48,34 +54,31 @@ class Game
             Console.SetCursorPosition(0, 1);
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             string blue = new string(' ', Console.WindowWidth);
-            Console.WriteLine(blue);
+            Console.Write(blue);
+            Console.ResetColor();
+
+            // you need to copy the filepath here for your own pc else it won't work
+            StreamReader readerClouds = new StreamReader(@"..\..\..\Clouds.txt");
+            string contentClouds = readerClouds.ReadToEnd();
+            Console.SetCursorPosition(1, 2);
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write(contentClouds);
             Console.ResetColor();
 
             // Зелена трева
             Console.SetCursorPosition(0, Console.WindowHeight - 1);
             Console.BackgroundColor = ConsoleColor.DarkGreen;
-            string green = new string(' ', 1);
+            string green = new string(' ', 0);
             Console.WriteLine(green);
             Console.ResetColor();
 
             // Декоративни паяжини
-            Console.SetCursorPosition(0, Console.WindowHeight - 16);
+            // you need to copy the filepath here for your own pc else it won't work
+            Console.SetCursorPosition(0, Console.WindowHeight - 15);
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(@"
-________/
-_______/\---------------------------------------------------------/
-______/\ \                                                \--+---/\
-_____/\ \ \                                              `/\-+--/\'\
-____/\ \ \ \                                             /`/\+-/\'\'\
-___/\ \ \ \ \                                            -+-    -+-+-
-__/\ \ \ \ \ \                                           \'\/+-\/`/`/
-_/\ \ \ \ \ \ \                                           \/-+--\/`/\
-/\ \ \ \ \ \ \ \                                           --+---\/ /
-\/-/-/-/-/-/-/-/-
-_\/ / / / / / /
-__\/ / / / / /
-___\/ / / / /
-____\/ / / /");
+            StreamReader readerWeb = new StreamReader(@"..\..\..\spiderWeb.txt");
+            string contentWeb = readerWeb.ReadToEnd();
+            Console.Write(contentWeb);
 
             // Дефиниране на капка дъжд най-отгоре
             Symbol newDropTop = new Symbol();
@@ -106,6 +109,7 @@ ____\/ / / /");
                     movingDrop.str = rain[i].str;
                     movingDrop.color = rain[i].color;
                     newList.Add(movingDrop);
+
                 }
                 // Проверка дали някоя капка не ни е удавила
                 if (movingDrop.x >= bug.x + 1
@@ -113,13 +117,19 @@ ____\/ / / /");
                     && movingDrop.y >= bug.y
                     && movingDrop.y <= bug.y + 1)
                 {
-                    PrintOnPosition(bug.x, bug.y - 1, bug.str = "~~~ ~ ~", bug.color = ConsoleColor.Blue);
-                    PrintOnPosition(bug.x, bug.y, bug.str = " Drown ", bug.color = ConsoleColor.Blue);
-                    PrintOnPosition(bug.x, bug.y + 1, bug.str = "~ ~ ~~~", bug.color = ConsoleColor.Blue);
-                    Thread.Sleep(2000);
+                    // you need to copy the filepath here for your own pc else it won't work
+                    player.Stop();
+                    SoundPlayer playerDied = new SoundPlayer(@"..\..\..\died.wav");
+                    playerDied.Play();
+
+                    PrintOnPosition(bug.x, bug.y - 1, bug.str = "~ ~ ~~~ ~ ~", bug.color = ConsoleColor.Blue);
+                    PrintOnPosition(bug.x, bug.y, bug.str = " YOU DIED ", bug.color = ConsoleColor.Blue);
+                    PrintOnPosition(bug.x, bug.y + 1, bug.str = "~ ~ ~~~ ~ ~", bug.color = ConsoleColor.Blue);
+                    Thread.Sleep(2050);
                     Console.Clear();
                     newList.Clear();
                     rain.Clear();
+                    player.Play();
                 }
             }
             rain = newList;
@@ -127,7 +137,16 @@ ____\/ / / /");
             // Отпечатване на капките дъжд
             foreach (Symbol drop in rain)
             {
+                if (drop.y == Console.WindowHeight - 1)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkGreen;
+                }
+                if (drop.y == 0)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkBlue;
+                }
                 PrintOnPosition(drop.x, drop.y, drop.str, drop.color);
+                Console.ResetColor();
             }
 
             for (int i = 0; i < 10; i++)
