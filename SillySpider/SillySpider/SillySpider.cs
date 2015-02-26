@@ -32,7 +32,6 @@ class Spider
 
     static void Main()
     {
-        // you need to copy the filepath here for your own pc else it won't work
         SoundPlayer player = new SoundPlayer(@"..\..\..\storm.wav");
         player.PlayLooping();
 
@@ -41,9 +40,9 @@ class Spider
         Console.BufferWidth = Console.WindowWidth = 70;
 
         // Defining user spider
-        Symbol bug = new Symbol();
-        bug.x = Console.WindowWidth / 2;
-        bug.y = Console.WindowHeight - 3;
+        Symbol spider = new Symbol();
+        spider.x = Console.WindowWidth / 2;
+        spider.y = Console.WindowHeight - 3;
 
         // LifeCounter
         int lifesCount = 3;
@@ -100,7 +99,7 @@ class Spider
             string contentWeb = readerWeb.ReadToEnd();
             Console.Write(contentWeb);
 
-            // Defyining fly
+            // Defining fly
             Symbol newFly = new Symbol();
             // Generating flies
             int chance = randomGenerator.Next(0, 100);
@@ -139,7 +138,7 @@ class Spider
             for (int i = 0; i < flies.Count; i++)
             {
                 // Moving flies
-                if (flies[i].x < Console.WindowWidth && flies[i].y + 1 < Console.WindowHeight - 1)
+                if (flies[i].y + 1 < Console.WindowHeight - 1)
                 {
                     movingFly.x = flies[i].x + 1;
                     movingFly.y = flies[i].y + 1;
@@ -149,10 +148,10 @@ class Spider
                 }
 
                 // Check for collision - if we eat fly
-                if (movingFly.x >= bug.x
-                    && movingFly.x <= bug.x + 5
-                    && movingFly.y >= bug.y
-                    && movingFly.y <= bug.y + 1)
+                if (movingFly.x + 1 >= spider.x
+                    && movingFly.x + 1 <= spider.x + 5
+                    && movingFly.y >= spider.y
+                    && movingFly.y <= spider.y + 1)
                 {
                     score.Add(movingFly);
                     newListFlies.Remove(movingFly);
@@ -177,10 +176,10 @@ class Spider
                 }
 
                 // Check for collision - if drop has hit us
-                if (movingDrop.x >= bug.x + 1
-                    && movingDrop.x <= bug.x + 3
-                    && movingDrop.y >= bug.y
-                    && movingDrop.y <= bug.y + 1)
+                if (movingDrop.x >= spider.x + 1
+                    && movingDrop.x <= spider.x + 3
+                    && movingDrop.y >= spider.y
+                    && movingDrop.y <= spider.y + 1)
                 {
                     lifesCount--;
 
@@ -188,19 +187,21 @@ class Spider
                     SoundPlayer playerDied = new SoundPlayer(@"..\..\..\died.wav");
                     playerDied.Play();
 
-                    PrintOnPosition(bug.x, bug.y - 1, bug.str = "DIED!", bug.color = ConsoleColor.Blue);
-                    PrintOnPosition(bug.x, bug.y, bug.str = string.Format("  {0}", lifesCount), bug.color = ConsoleColor.Blue);
-                    PrintOnPosition(bug.x, bug.y + 1, bug.str = "lifes", bug.color = ConsoleColor.Blue);
-                    PrintOnPosition(bug.x, bug.y + 2, bug.str = "left!", bug.color = ConsoleColor.Blue);
+                    if (lifesCount >= 0)
+                    {
+                        PrintOnPosition(spider.x, spider.y - 2, spider.str = "DIED!", spider.color = ConsoleColor.Blue);
+                        PrintOnPosition(spider.x, spider.y - 1, spider.str = string.Format("  {0}", lifesCount), spider.color = ConsoleColor.Blue);
+                        PrintOnPosition(spider.x, spider.y, spider.str = "lives", spider.color = ConsoleColor.Blue);
+                        PrintOnPosition(spider.x, spider.y + 1, spider.str = "left!", spider.color = ConsoleColor.Blue);
 
-                    Thread.Sleep(2000);
-                    Console.Clear();
-                    newListDrops.Clear();
-                    newListFlies.Clear();
-                    rain.Clear();
-                    player.Play();
-
-                    if (lifesCount <= 0)
+                        Thread.Sleep(2000);
+                        Console.Clear();
+                        newListDrops.Clear();
+                        newListFlies.Clear();
+                        rain.Clear();
+                        player.Play();
+                    }
+                    else
                     {
                         Console.SetCursorPosition(Console.WindowWidth / 2 - 5, Console.WindowHeight / 2 - 2);
                         Console.WriteLine("GAME OVER");
@@ -232,9 +233,9 @@ class Spider
 
             for (int i = 0; i < 10; i++)
             {
-                // Printing the spider in black which fix the moving bug at printing
-                PrintOnPosition(bug.x, bug.y, bug.str = @"_\o/_", bug.color = ConsoleColor.Black);
-                PrintOnPosition(bug.x, bug.y + 1, bug.str = @"/(_)\", bug.color = ConsoleColor.Black);
+                // Printing the spider in black which fix the moving spider at printing
+                PrintOnPosition(spider.x, spider.y, spider.str = @"_\o/_", spider.color = ConsoleColor.Black);
+                PrintOnPosition(spider.x, spider.y + 1, spider.str = @"/(_)\", spider.color = ConsoleColor.Black);
 
                 // Catching movement of the arrows and spider movement
                 if (Console.KeyAvailable)
@@ -242,30 +243,30 @@ class Spider
                     ConsoleKeyInfo pressedKey = Console.ReadKey(true);
                     while (Console.KeyAvailable) Console.ReadKey(true);
                     if (pressedKey.Key == ConsoleKey.LeftArrow
-                        && bug.x >= 1)
+                        && spider.x >= 1)
                     {
-                        bug.x--;
+                        spider.x--;
                     }
                     else if (pressedKey.Key == ConsoleKey.RightArrow
-                        && bug.x < Console.WindowWidth - 5)
+                        && spider.x < Console.WindowWidth - 5)
                     {
-                        bug.x++;
+                        spider.x++;
                     }
                     else if (pressedKey.Key == ConsoleKey.UpArrow
-                        && bug.y >= Console.WindowHeight - 12)
+                        && spider.y >= Console.WindowHeight - 12)
                     {
-                        bug.y--;
+                        spider.y--;
                     }
                     else if (pressedKey.Key == ConsoleKey.DownArrow
-                        && bug.y < Console.WindowHeight - 3)
+                        && spider.y < Console.WindowHeight - 3)
                     {
-                        bug.y++;
+                        spider.y++;
                     }
                 }
 
                 // Printing red spider as it should be
-                PrintOnPosition(bug.x, bug.y, bug.str = @"_\o/_", bug.color = ConsoleColor.Red);
-                PrintOnPosition(bug.x, bug.y + 1, bug.str = @"/(_)\", bug.color = ConsoleColor.Red);
+                PrintOnPosition(spider.x, spider.y, spider.str = @"_\o/_", spider.color = ConsoleColor.Red);
+                PrintOnPosition(spider.x, spider.y + 1, spider.str = @"/(_)\", spider.color = ConsoleColor.Red);
 
                 // Slowing down the cycle
                 Thread.Sleep(15);
