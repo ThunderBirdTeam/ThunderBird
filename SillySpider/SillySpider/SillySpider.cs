@@ -29,6 +29,24 @@ class Spider
         Console.ForegroundColor = color;
         Console.WriteLine(str);
     }
+    // Method for printing the sky and some clouds
+    static void PrintCloudsAndSky()
+    {
+        // Blue sky
+        Console.SetCursorPosition(0, 1);
+        Console.BackgroundColor = ConsoleColor.DarkBlue;
+        string blue = new string(' ', Console.WindowWidth);
+        Console.Write(blue);
+        Console.ResetColor();
+
+        // Clouds
+        StreamReader readerClouds = new StreamReader(@"..\..\..\Clouds.txt");
+        string contentClouds = readerClouds.ReadToEnd();
+        Console.SetCursorPosition(1, 2);
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write(contentClouds);
+        Console.ResetColor();
+    }
 
     static void Main()
     {
@@ -64,20 +82,9 @@ class Spider
             // Clearing console
             Console.Clear();
 
-            // Blue sky
-            Console.SetCursorPosition(0, 1);
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
-            string blue = new string(' ', Console.WindowWidth);
-            Console.Write(blue);
-            Console.ResetColor();
-
-            // Clouds
-            StreamReader readerClouds = new StreamReader(@"..\..\..\Clouds.txt");
-            string contentClouds = readerClouds.ReadToEnd();
-            Console.SetCursorPosition(1, 2);
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(contentClouds);
-            Console.ResetColor();
+            //Printing the sky and some clouds
+            PrintCloudsAndSky();
+          
 
             // Score and Lives
             PrintOnPositionInfo(3, 3, "Score: " + score, ConsoleColor.Blue);
@@ -275,4 +282,6 @@ class Spider
             }
         }
     }
+
+    
 }
