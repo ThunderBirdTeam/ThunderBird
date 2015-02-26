@@ -148,10 +148,10 @@ class Spider
                 }
 
                 // Check for collision - if we eat fly
-                if (movingFly.x + 1 >= spider.x
-                    && movingFly.x + 1 <= spider.x + 5
+                if (movingFly.x + 2 >= spider.x
+                    && movingFly.x <= spider.x + 4
                     && movingFly.y >= spider.y
-                    && movingFly.y <= spider.y + 1)
+                    && movingFly.y <= spider.y + 2)
                 {
                     score.Add(movingFly);
                     newListFlies.Remove(movingFly);
