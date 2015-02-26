@@ -184,10 +184,10 @@ class Spider
                     lifesCount--;
 
                     player.Stop();
-                    SoundPlayer playerDied = new SoundPlayer(@"..\..\..\died.wav");
-                    playerDied.Play();
+                    SoundPlayer lifeLost = new SoundPlayer(@"..\..\..\lifeLost.wav");
+                    lifeLost.Play();
 
-                    if (lifesCount >= 0)
+                    if (lifesCount > 0)
                     {
                         PrintOnPosition(spider.x, spider.y - 2, spider.str = "DIED!", spider.color = ConsoleColor.Blue);
                         PrintOnPosition(spider.x, spider.y - 1, spider.str = string.Format("  {0}", lifesCount), spider.color = ConsoleColor.Blue);
@@ -201,8 +201,14 @@ class Spider
                         rain.Clear();
                         player.Play();
                     }
-                    else
+                    else if(lifesCount == 0)
                     {
+                        SoundPlayer died = new SoundPlayer(@"..\..\..\died.wav");
+                        died.Play();
+
+                        PrintOnPositionInfo(3, 3, "Score:" + score.Count, ConsoleColor.Blue);
+                        PrintOnPositionInfo(3, 4, "Lives:" + lifesCount, ConsoleColor.Green);
+
                         Console.SetCursorPosition(Console.WindowWidth / 2 - 5, Console.WindowHeight / 2 - 2);
                         Console.WriteLine("GAME OVER");
                         Console.ReadLine();
