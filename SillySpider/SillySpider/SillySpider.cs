@@ -4,7 +4,7 @@ using System.IO;
 using System.Media;
 using System.Threading;
 
-// Структура за отпечатване на всеки един символ
+// Struct for printing each symbol
 struct Symbol
 {
     public int x;
@@ -12,15 +12,22 @@ struct Symbol
     public string str;
     public ConsoleColor color;
 }
-class Game
+class Spider
 {
-    // Отпечатване на капките дъжд и буболечката
+    // Printing rain, spider and flies
     static void PrintOnPosition(int x, int y, string str,
         ConsoleColor color = ConsoleColor.Cyan)
     {
         Console.SetCursorPosition(x, y);
         Console.ForegroundColor = color;
         Console.Write(str);
+    }
+    // Method for printing the text
+    static void PrintOnPositionInfo(int x, int y, string str, ConsoleColor color = ConsoleColor.DarkGray)
+    {
+        Console.SetCursorPosition(x, y);
+        Console.ForegroundColor = color;
+        Console.WriteLine(str);
     }
 
     static void Main()
@@ -29,35 +36,44 @@ class Game
         SoundPlayer player = new SoundPlayer(@"..\..\..\storm.wav");
         player.PlayLooping();
 
-        // Задаване на работното поле
+        // Parameters of the playfield
         Console.BufferHeight = Console.WindowHeight = 40;
         Console.BufferWidth = Console.WindowWidth = 70;
 
-        // Дефиниране на потребителската буболечка
+        // Defining user spider
         Symbol bug = new Symbol();
         bug.x = Console.WindowWidth / 2;
         bug.y = Console.WindowHeight - 3;
 
-        // Дефиниране на лист, който ще съдържа всички капки дъжд
+        // LifeCounter
+        int lifesCount = 3;
+
+        // Creating list which will contain all falling drops
         List<Symbol> rain = new List<Symbol>();
 
-        // Генератор на случайни числа за разположението на капките
+        // Creating list which will contain all flies
+        List<Symbol> flies = new List<Symbol>();
+
+        //Creating list which will count flies/store score
+        List<Symbol> score = new List<Symbol>();
+
+        // RandomGenerator of all random needs
         Random randomGenerator = new Random();
 
-        // Безкраен цикъл за същинската игра
+        // While cycle for the game itself
         while (true)
         {
-            // Изчистване на конзолата
+            // Clearing console
             Console.Clear();
 
-            // Синьо небе
+            // Blue sky
             Console.SetCursorPosition(0, 1);
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             string blue = new string(' ', Console.WindowWidth);
             Console.Write(blue);
             Console.ResetColor();
 
-            // you need to copy the filepath here for your own pc else it won't work
+            // Clouds
             StreamReader readerClouds = new StreamReader(@"..\..\..\Clouds.txt");
             string contentClouds = readerClouds.ReadToEnd();
             Console.SetCursorPosition(1, 2);
@@ -65,14 +81,18 @@ class Game
             Console.Write(contentClouds);
             Console.ResetColor();
 
-            // Зелена трева
+            // Score and Lives
+            PrintOnPositionInfo(3, 3, "Score:" + score.Count, ConsoleColor.Blue);
+            PrintOnPositionInfo(3, 4, "Lives:" + lifesCount, ConsoleColor.Green);
+
+            // GreenGrass
             Console.SetCursorPosition(0, Console.WindowHeight - 1);
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             string green = new string(' ', 0);
             Console.WriteLine(green);
             Console.ResetColor();
 
-            // Декоративни паяжини
+            // Decorative web
             // you need to copy the filepath here for your own pc else it won't work
             Console.SetCursorPosition(0, Console.WindowHeight - 15);
             Console.ForegroundColor = ConsoleColor.White;
@@ -80,67 +100,121 @@ class Game
             string contentWeb = readerWeb.ReadToEnd();
             Console.Write(contentWeb);
 
-            // Дефиниране на капка дъжд най-отгоре
-            Symbol newDropTop = new Symbol();
-            newDropTop.color = ConsoleColor.Cyan;
-            newDropTop.x = randomGenerator.Next(0, Console.WindowWidth);
-            newDropTop.y = -1;
-            newDropTop.str = "/";
-            rain.Add(newDropTop);
+            // Defyining fly
+            Symbol newFly = new Symbol();
+            // Generating flies
+            int chance = randomGenerator.Next(0, 100);
 
-            // Дефиниране на капка дъжд най-отдясно
-            Symbol newDropRight = new Symbol();
-            newDropRight.color = ConsoleColor.Cyan;
-            newDropRight.x = Console.WindowWidth - 1;
-            newDropRight.y = randomGenerator.Next(0, Console.WindowHeight);
-            newDropRight.str = "/";
-            rain.Add(newDropRight);
+            if (chance < 10)
+            {
+                newFly.x = 1;
+                newFly.y = randomGenerator.Next(0, Console.WindowHeight);
+                newFly.color = ConsoleColor.Yellow;
+                newFly.str = ">:<";
+                flies.Add(newFly);
+            }
+            else
+            {
+                // Specifying top drops
+                Symbol newDropTop = new Symbol();
+                newDropTop.color = ConsoleColor.Cyan;
+                newDropTop.x = randomGenerator.Next(0, Console.WindowWidth);
+                newDropTop.y = -1;
+                newDropTop.str = "/";
+                rain.Add(newDropTop);
 
-            // Капки
-            List<Symbol> newList = new List<Symbol>();
+                // Specyfying right drops
+                Symbol newDropRight = new Symbol();
+                newDropRight.color = ConsoleColor.Cyan;
+                newDropRight.x = Console.WindowWidth - 1;
+                newDropRight.y = randomGenerator.Next(0, Console.WindowHeight);
+                newDropRight.str = "/";
+                rain.Add(newDropRight);
+            }
+
+            // Fly list
+            List<Symbol> newListFlies = new List<Symbol>();
+            Symbol movingFly = new Symbol();
+
+            for (int i = 0; i < flies.Count; i++)
+            {
+                // Moving flies
+                if (flies[i].x < Console.WindowWidth && flies[i].y + 1 < Console.WindowHeight - 1)
+                {
+                    movingFly.x = flies[i].x + 1;
+                    movingFly.y = flies[i].y + 1;
+                    movingFly.str = flies[i].str;
+                    movingFly.color = flies[i].color;
+                    newListFlies.Add(movingFly);
+                }
+
+                // Check for collision - if we eat fly
+                if (movingFly.x >= bug.x
+                    && movingFly.x <= bug.x + 5
+                    && movingFly.y >= bug.y
+                    && movingFly.y <= bug.y + 1)
+                {
+                    score.Add(movingFly);
+                    newListFlies.Remove(movingFly);
+                }
+            }
+            flies = newListFlies;
+
+            // Drop list
+            List<Symbol> newListDrops = new List<Symbol>();
             Symbol movingDrop = new Symbol();
+
             for (int i = 0; i < rain.Count; i++)
             {
-                // Преместване на капките
-                if (rain[i].x - 1 >= 1 && rain[i].y + 1 < Console.WindowHeight)
+                // Moving drops
+                if (rain[i].x - 1 >= 1 && rain[i].y + 1 < Console.WindowHeight - 1)
                 {
                     movingDrop.x = rain[i].x - 1;
                     movingDrop.y = rain[i].y + 1;
                     movingDrop.str = rain[i].str;
                     movingDrop.color = rain[i].color;
-                    newList.Add(movingDrop);
-
+                    newListDrops.Add(movingDrop);
                 }
-                // Проверка дали някоя капка не ни е удавила
+
+                // Check for collision - if drop has hit us
                 if (movingDrop.x >= bug.x + 1
                     && movingDrop.x <= bug.x + 3
                     && movingDrop.y >= bug.y
                     && movingDrop.y <= bug.y + 1)
                 {
-                    // you need to copy the filepath here for your own pc else it won't work
+                    lifesCount--;
+
                     player.Stop();
                     SoundPlayer playerDied = new SoundPlayer(@"..\..\..\died.wav");
                     playerDied.Play();
 
-                    PrintOnPosition(bug.x, bug.y - 1, bug.str = "~ ~ ~~~ ~ ~", bug.color = ConsoleColor.Blue);
-                    PrintOnPosition(bug.x, bug.y, bug.str = " YOU DIED ", bug.color = ConsoleColor.Blue);
-                    PrintOnPosition(bug.x, bug.y + 1, bug.str = "~ ~ ~~~ ~ ~", bug.color = ConsoleColor.Blue);
-                    Thread.Sleep(2050);
+                    PrintOnPosition(bug.x, bug.y - 1, bug.str = "DIED!", bug.color = ConsoleColor.Blue);
+                    PrintOnPosition(bug.x, bug.y, bug.str = string.Format("  {0}", lifesCount), bug.color = ConsoleColor.Blue);
+                    PrintOnPosition(bug.x, bug.y + 1, bug.str = "lifes", bug.color = ConsoleColor.Blue);
+                    PrintOnPosition(bug.x, bug.y + 2, bug.str = "left!", bug.color = ConsoleColor.Blue);
+
+                    Thread.Sleep(2000);
                     Console.Clear();
-                    newList.Clear();
+                    newListDrops.Clear();
+                    newListFlies.Clear();
                     rain.Clear();
                     player.Play();
+
+                    if (lifesCount <= 0)
+                    {
+                        Console.SetCursorPosition(Console.WindowWidth / 2 - 5, Console.WindowHeight / 2 - 2);
+                        Console.WriteLine("GAME OVER");
+                        Console.ReadLine();
+                        Console.SetCursorPosition(Console.WindowWidth / 2 - 15, Console.WindowHeight / 2);
+                        return;
+                    }
                 }
             }
-            rain = newList;
+            rain = newListDrops;
 
-            // Отпечатване на капките дъжд
+            // Printing drops
             foreach (Symbol drop in rain)
             {
-                if (drop.y == Console.WindowHeight - 1)
-                {
-                    Console.BackgroundColor = ConsoleColor.DarkGreen;
-                }
                 if (drop.y == 0)
                 {
                     Console.BackgroundColor = ConsoleColor.DarkBlue;
@@ -149,15 +223,20 @@ class Game
                 Console.ResetColor();
             }
 
+            // Printing flies
+            foreach (Symbol fly in flies)
+            {
+                PrintOnPosition(fly.x, fly.y, fly.str, fly.color);
+                Console.ResetColor();
+            }
+
             for (int i = 0; i < 10; i++)
             {
-                // Отпечатване на буболечката черна/невидима,
-                // което оправя бъг с отпечатването при преместване
+                // Printing the spider in black which fix the moving bug at printing
                 PrintOnPosition(bug.x, bug.y, bug.str = @"_\o/_", bug.color = ConsoleColor.Black);
                 PrintOnPosition(bug.x, bug.y + 1, bug.str = @"/(_)\", bug.color = ConsoleColor.Black);
 
-                // Улавяне на натиснатите клавиши-стрелки
-                // и преместване на буболечката
+                // Catching movement of the arrows and spider movement
                 if (Console.KeyAvailable)
                 {
                     ConsoleKeyInfo pressedKey = Console.ReadKey(true);
@@ -184,11 +263,11 @@ class Game
                     }
                 }
 
-                // Отпечатване на буболечката червена, каквато трябва да бъде
+                // Printing red spider as it should be
                 PrintOnPosition(bug.x, bug.y, bug.str = @"_\o/_", bug.color = ConsoleColor.Red);
                 PrintOnPosition(bug.x, bug.y + 1, bug.str = @"/(_)\", bug.color = ConsoleColor.Red);
 
-                // Изкуствено забавяне изпълнението на цикъла
+                // Slowing down the cycle
                 Thread.Sleep(15);
             }
         }
