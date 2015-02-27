@@ -11,4 +11,4 @@ C# Part II Teamwork Project
  o Project explanation – describe your game 
  o The URL of your Git repository 
  
- Presentation (optional) 
+ Presentation (optional)  - in progress - finishing stage
