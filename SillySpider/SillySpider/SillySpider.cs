@@ -89,7 +89,7 @@ class Spider
         PrintASCIIBackground(1, 2, ConsoleColor.DarkGray, @"..\..\..\Clouds.txt");
 
         // Decorative web
-        PrintASCIIBackground(0, Console.WindowHeight - 14, ConsoleColor.White, @"..\..\..\spiderWeb.txt");
+        PrintASCIIBackground(0, Console.WindowHeight - 14, ConsoleColor.White, @"..\..\..\SpiderWeb.txt");
 
         // Green grass
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
@@ -205,7 +205,7 @@ class Spider
 
                 player.Stop();
                 SoundPlayer lifeLost = new SoundPlayer();
-                PlaySound(@"..\..\..\lifeLost.wav", lifeLost);
+                PlaySound(@"..\..\..\LifeLost.wav", lifeLost);
                 lifeLost.Play();
 
                 // Message that shows lives left
@@ -228,7 +228,7 @@ class Spider
                 else
                 {
                     SoundPlayer died = new SoundPlayer();
-                    PlaySound(@"..\..\..\died.wav", died);
+                    PlaySound(@"..\..\..\Died.wav", died);
                     died.Play();
 
                     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -395,7 +395,7 @@ class Spider
     {
         // Playing rain sound
         SoundPlayer player = new SoundPlayer();
-        PlaySound(@"..\..\..\storm.wav", player);
+        PlaySound(@"..\..\..\Storm.wav", player);
         player.PlayLooping();
 
         // Parameters of the playfield
