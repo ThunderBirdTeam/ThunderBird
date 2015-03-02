@@ -233,16 +233,16 @@ class Spider
 
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.SetCursorPosition(Console.WindowWidth / 2 - 5, Console.WindowHeight / 2 - 2);
-                    Console.WriteLine("GAME OVER");
-                    Console.ReadLine();
-                    Console.SetCursorPosition(Console.WindowWidth / 2 - 15, Console.WindowHeight / 2);
-                    Environment.Exit(0);
+                    Console.Write("GAME OVER");
+                    Thread.Sleep((int)6000);
+
+                    //End Screen
+                    EndScreen();
                 }
             }
         }
         return newListDrops;
     }
-
     // Printing drops
     private static void PrintingDrops(List<Symbol> rain)
     {
@@ -390,12 +390,62 @@ class Spider
             spider = MovingAndPrintingSpider(spider);
         }
     }
+    // Loads up the Starting Screen and starts the game after ENTER is pressed
+    private static void StartGame()
+    {
+        do
+        {
+            int colorNumber = 0;
+            while (!Console.KeyAvailable)
+            {
 
-    static void Main()
+                switch (colorNumber)
+                {
+                    case 0: Console.ForegroundColor = ConsoleColor.Yellow; break;
+                    case 1: Console.ForegroundColor = ConsoleColor.Green; break;
+                    case 2: Console.ForegroundColor = ConsoleColor.Cyan; break;
+                    case 3: Console.ForegroundColor = ConsoleColor.White; break;
+
+                    default:
+                        break;
+                }
+                StreamReader startUp = new StreamReader(@"..\..\..\StartUp.txt");
+                string startScreen = startUp.ReadToEnd();
+                Console.WindowHeight = 40;
+                Console.WindowWidth = 50;
+                Console.Write(startScreen);
+                colorNumber++;
+
+                if (colorNumber == 4)
+                {
+                    colorNumber = 0;
+                }
+                Thread.Sleep((int)(500));
+                Console.Clear();
+            }
+        }
+        while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+        StartPlaying();
+    }
+
+    //EndGameScreen
+    private static void EndScreen()
+    {
+        Console.Clear();
+        StreamReader EndScreen = new StreamReader(@"..\..\..\EndScreen.txt");
+        string end = EndScreen.ReadToEnd();
+        Console.WindowHeight = 30;
+        Console.WindowWidth = 80;
+        Console.Write(end);
+
+        Environment.Exit(0);
+    }
+
+    // Starts up the game
+    private static void StartPlaying()
     {
         // Playing rain sound
-        SoundPlayer player = new SoundPlayer();
-        PlaySound(@"..\..\..\Storm.wav", player);
+        SoundPlayer player = new SoundPlayer(@"..\..\..\Storm.wav");
         player.PlayLooping();
 
         // Parameters of the playfield
@@ -420,5 +470,10 @@ class Spider
 
         // While cycle for the game itself
         GameCycle(player, ref spider, ref lifes, ref score, ref rain, ref flies, randomGenerator);
+        Console.WriteLine(score);
+    }
+    static void Main()
+    {
+        StartGame();
     }
 }
