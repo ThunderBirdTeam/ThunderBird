@@ -86,7 +86,7 @@ class Spider
         Console.ResetColor();
 
         // Clouds
-        PrintASCIIBackground(1, 2, ConsoleColor.Blue, @"..\..\..\Clouds.txt");
+        PrintASCIIBackground(0, 2, ConsoleColor.Blue, @"..\..\..\Clouds.txt");
 
         // Decorative web
         PrintASCIIBackground(0, Console.WindowHeight - 14, ConsoleColor.White, @"..\..\..\SpiderWeb.txt");
