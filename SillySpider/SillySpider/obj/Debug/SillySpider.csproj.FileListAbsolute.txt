@@ -10,3 +10,9 @@ E:\C# projects\ThunderBird\SillySpider\SillySpider\obj\Debug\Game.pdb
 E:\C# projects\ThunderBird\SillySpider\SillySpider\bin\Debug\Game.exe
 E:\C# projects\ThunderBird\SillySpider\SillySpider\bin\Debug\Game.pdb
 E:\C# projects\ThunderBird\SillySpider\SillySpider\obj\Debug\SillySpider.csprojResolveAssemblyReference.cache
+C:\Users\Nikola\Documents\GitHub\Telerik\ThunderBird\SillySpider\SillySpider\bin\Debug\Game.exe.config
+C:\Users\Nikola\Documents\GitHub\Telerik\ThunderBird\SillySpider\SillySpider\obj\Debug\Game.exe
+C:\Users\Nikola\Documents\GitHub\Telerik\ThunderBird\SillySpider\SillySpider\obj\Debug\Game.pdb
+C:\Users\Nikola\Documents\GitHub\Telerik\ThunderBird\SillySpider\SillySpider\bin\Debug\Game.exe
+C:\Users\Nikola\Documents\GitHub\Telerik\ThunderBird\SillySpider\SillySpider\bin\Debug\Game.pdb
+C:\Users\Nikola\Documents\GitHub\Telerik\ThunderBird\SillySpider\SillySpider\obj\Debug\SillySpider.csprojResolveAssemblyReference.cache
