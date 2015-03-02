@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Media;
+using System.Security;
 using System.Threading;
 
 // Struct for printing each symbol
@@ -15,16 +16,67 @@ struct Symbol
 class Spider
 {
     // Printing the rain, spider, flies and info
-    static void PrintOnPosition(int x, int y, string str,
-        ConsoleColor color)
+    static void PrintOnPosition(int x, int y, string str, ConsoleColor color)
     {
         Console.SetCursorPosition(x, y);
         Console.ForegroundColor = color;
         Console.Write(str);
     }
 
+    // Checks if text file is readed successfully
+    private static void PrintASCIIBackground(int x, int y, ConsoleColor color, string txt)
+    {
+        try
+        {
+            Console.SetCursorPosition(x, y);
+            Console.ForegroundColor = color;
+            StreamReader content = new StreamReader(txt);
+            Console.Write(content.ReadToEnd());
+        }
+        catch (ArgumentNullException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (ArgumentException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (PathTooLongException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (FileNotFoundException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (IOException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (NotSupportedException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (SecurityException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+    }
+
     // Printing static elements of the playfield - the sky, grass, static web and some clouds
-    static void PrintStaticElementsPlayfield()
+    public static void PrintStaticElementsPlayfield()
     {
         // Blue sky
         Console.SetCursorPosition(0, 1);
@@ -34,12 +86,10 @@ class Spider
         Console.ResetColor();
 
         // Clouds
-        StreamReader readerClouds = new StreamReader(@"..\..\..\Clouds.txt");
-        string contentClouds = readerClouds.ReadToEnd();
-        Console.SetCursorPosition(1, 2);
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.Write(contentClouds);
-        Console.ResetColor();
+        PrintASCIIBackground(1, 2, ConsoleColor.DarkGray, @"..\..\..\Clouds.txt");
+
+        // Decorative web
+        PrintASCIIBackground(0, Console.WindowHeight - 14, ConsoleColor.White, @"..\..\..\spiderWeb.txt");
 
         // Green grass
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
@@ -47,13 +97,6 @@ class Spider
         string green = new string(' ', 0);
         Console.WriteLine(green);
         Console.ResetColor();
-
-        // Decorative web
-        Console.SetCursorPosition(0, Console.WindowHeight - 15);
-        Console.ForegroundColor = ConsoleColor.White;
-        StreamReader readerWeb = new StreamReader(@"..\..\..\spiderWeb.txt");
-        string contentWeb = readerWeb.ReadToEnd();
-        Console.Write(contentWeb);
     }
 
     // Defining user spider
@@ -161,7 +204,8 @@ class Spider
                 lifes--;
 
                 player.Stop();
-                SoundPlayer lifeLost = new SoundPlayer(@"..\..\..\lifeLost.wav");
+                SoundPlayer lifeLost = new SoundPlayer();
+                PlaySound(@"..\..\..\lifeLost.wav", lifeLost);
                 lifeLost.Play();
 
                 // Message that shows lives left
@@ -183,9 +227,11 @@ class Spider
                 // Game over
                 else
                 {
-                    SoundPlayer died = new SoundPlayer(@"..\..\..\died.wav");
+                    SoundPlayer died = new SoundPlayer();
+                    PlaySound(@"..\..\..\died.wav", died);
                     died.Play();
 
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.SetCursorPosition(Console.WindowWidth / 2 - 5, Console.WindowHeight / 2 - 2);
                     Console.WriteLine("GAME OVER");
                     Console.ReadLine();
@@ -267,6 +313,56 @@ class Spider
         return spider;
     }
 
+    // Checks if wav file is loaded successfully
+    private static SoundPlayer PlaySound(string wav, SoundPlayer player)
+    {
+        try
+        {
+            player.SoundLocation = wav;
+        }
+        catch (ArgumentNullException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (ArgumentException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (PathTooLongException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (FileNotFoundException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (IOException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (NotSupportedException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (SecurityException e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine("Error: " + e.Message);
+        }
+        return player;
+    }
+
     // While cycle of the game
     private static void GameCycle(SoundPlayer player, ref Symbol spider, ref int lifes, ref int score, ref List<Symbol> rain, ref List<Symbol> flies, Random randomGenerator)
     {
@@ -298,7 +394,8 @@ class Spider
     static void Main()
     {
         // Playing rain sound
-        SoundPlayer player = new SoundPlayer(@"..\..\..\storm.wav");
+        SoundPlayer player = new SoundPlayer();
+        PlaySound(@"..\..\..\storm.wav", player);
         player.PlayLooping();
 
         // Parameters of the playfield
