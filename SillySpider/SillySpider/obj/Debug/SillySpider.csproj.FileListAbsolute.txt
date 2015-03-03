@@ -1,7 +1,6 @@
 D:\Team ThunderBird\SillySpider\SillySpider\bin\Debug\Game.exe.config
 D:\Team ThunderBird\SillySpider\SillySpider\bin\Debug\Game.exe
 D:\Team ThunderBird\SillySpider\SillySpider\bin\Debug\Game.pdb
-D:\Team ThunderBird\SillySpider\SillySpider\obj\Debug\SillySpider.csprojResolveAssemblyReference.cache
 D:\Team ThunderBird\SillySpider\SillySpider\obj\Debug\Game.exe
 D:\Team ThunderBird\SillySpider\SillySpider\obj\Debug\Game.pdb
 E:\C# projects\ThunderBird\SillySpider\SillySpider\bin\Debug\Game.exe.config
@@ -28,3 +27,4 @@ C:\Users\Admin\Documents\GitHub\ThunderBird\SillySpider\SillySpider\obj\Debug\Ga
 C:\Users\Admin\Documents\GitHub\ThunderBird\SillySpider\SillySpider\bin\Debug\Game.exe
 C:\Users\Admin\Documents\GitHub\ThunderBird\SillySpider\SillySpider\bin\Debug\Game.pdb
 C:\Users\Admin\Documents\GitHub\ThunderBird\SillySpider\SillySpider\obj\Debug\SillySpider.csprojResolveAssemblyReference.cache
+D:\Team ThunderBird\SillySpider\SillySpider\obj\Debug\SillySpider.csprojResolveAssemblyReference.cache
