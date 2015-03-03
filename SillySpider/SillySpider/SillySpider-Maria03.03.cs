@@ -178,7 +178,7 @@ class Spider
     }
 
     // Moving Drops
-    private static List<Symbol> MovingDrops(SoundPlayer player, ref Symbol spider, ref int lifes, List<Symbol> rain, List<Symbol> newListFlies)
+    private static List<Symbol> MovingDrops(SoundPlayer player, ref Symbol spider, ref int lifes, ref int score, List<Symbol> rain, List<Symbol> newListFlies)
     {
         // Drops list
         List<Symbol> newListDrops = new List<Symbol>();
@@ -238,6 +238,11 @@ class Spider
                     Console.ReadLine();
                     Console.SetCursorPosition(Console.WindowWidth / 2 - 15, Console.WindowHeight / 2);
 
+                    Result(score);//---------------------------->>>>Getting results to file
+                    CompareResults();
+                    Console.Clear();
+                    PrintingResults();//------------------------>>Printing all players score
+                    Console.ReadLine();
                     Environment.Exit(0);
                 }
             }
@@ -365,6 +370,89 @@ class Spider
         return player;
     }
 
+    //Method for storing results in file------------------>>Maria
+    private static void Result(int score)
+    {
+        string totalScore = score.ToString();
+        string[,] gameResult = new string[1, 10];
+        gameResult[0, 0] = playerName;
+        gameResult[0, 1] = totalScore;
+
+        // Create a StreamWriter instance
+        StreamWriter writer = new StreamWriter(@"..\..\currentPlayerScore.txt");
+        //Printing result
+        using (writer)
+        {
+            for (int row = 0; row < gameResult.GetLength(0); row++)
+            {
+                for (int col = 0; col < gameResult.GetLength(1); col++)
+                {
+                    writer.Write(" " + gameResult[row, col]);
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+
+    //Compare current result file with old one and joins them in new text file--------------------->Maria
+    private static void CompareResults()
+    {
+        System.Text.Encoding encodingCyr = System.Text.Encoding.GetEncoding(1251);
+
+        try
+        {
+            string fileOne = @"..\..\currentPlayerScore.txt";
+            StreamReader readOne = new StreamReader(fileOne, encodingCyr);
+
+
+            string readFileOne = "";
+            using (readOne)
+            {
+                readFileOne = readOne.ReadToEnd();
+            }
+
+            StreamWriter newFile = new StreamWriter(@"..\..\AllPlayersScore.txt", true, encodingCyr);
+
+            using (newFile)
+            {
+                newFile.WriteLine(readFileOne);
+
+            }
+
+            Console.WriteLine("Done!");
+        }
+        catch (FileLoadException)
+        {
+            Console.WriteLine("Files not found.");
+        }
+    }
+
+    //Method for printing the results ---------------------------------------->>>Maria<<<<<<<<<<<<<<<<<<<<<<<<<<<------------------
+    private static void PrintingResults()
+    {
+        // Create an instance of StreamReader to read from a file
+        StreamReader reader = new StreamReader(@"..\..\AllPlayersScore.txt");
+
+        int lineNumber = 0;
+
+        // Read first line from the text file
+        string line = reader.ReadLine();
+
+        // Read the other lines from the text file
+        while (line != null)
+        {
+            lineNumber++;
+            Console.SetCursorPosition(Console.WindowWidth / 2 - 15, Console.WindowHeight / 2);
+            Console.WriteLine("Player score: {0}", line);
+            line = reader.ReadLine();
+        }
+
+        // Close the resource after you've finished using it
+        reader.Close();
+    }
+
+
+
     // While cycle of the game
     private static void GameCycle(SoundPlayer player, ref Symbol spider, ref int lifes, ref int score, ref List<Symbol> rain, ref List<Symbol> flies, Random randomGenerator)
     {
@@ -383,7 +471,7 @@ class Spider
             List<Symbol> newListFlies = MovingFlies(ref spider, ref score, flies);
             flies = newListFlies;
 
-            List<Symbol> newListDrops = MovingDrops(player, ref spider, ref lifes, rain, newListFlies);
+            List<Symbol> newListDrops = MovingDrops(player, ref spider, ref lifes, ref score, rain, newListFlies);
             rain = newListDrops;
 
             PrintingDrops(rain);
@@ -391,23 +479,6 @@ class Spider
             PrintingFlies(flies);
 
             spider = MovingAndPrintingSpider(spider);
-        }
-    }
-
-    private static void GameResults(ref int score, ref string playerName)//----------------------------->>>>>>Maria<<<<<<<<<<<>>
-    {
-        string totalScore = score.ToString();
-        string[,] gameResult = new string[1, 10];
-        gameResult[0, 0] = playerName;
-        gameResult[0, 1] = totalScore;
-      //Printing result
-        for (int row = 0; row < gameResult.GetLength(0); row++)
-        {
-            for (int col = 0; col < gameResult.GetLength(1); col++)
-            {
-                Console.Write(" " + gameResult[row, col]);
-            }
-            Console.WriteLine();
         }
     }
 
@@ -443,5 +514,6 @@ class Spider
 
         // While cycle for the game itself
         GameCycle(player, ref spider, ref lifes, ref score, ref rain, ref flies, randomGenerator);
+
     }
 }
