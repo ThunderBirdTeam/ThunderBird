@@ -412,7 +412,7 @@ class Spider
                 StreamReader startUp = new StreamReader(@"..\..\..\StartUp.txt");
                 string startScreen = startUp.ReadToEnd();
                 Console.BufferHeight = Console.WindowHeight = 40;
-                Console.BufferWidth = Console.WindowWidth = 50;
+                Console.BufferWidth = Console.WindowWidth = 70;
                 Console.Write(startScreen);
                 colorNumber++;
 
@@ -434,8 +434,8 @@ class Spider
         Console.Clear();
         StreamReader EndScreen = new StreamReader(@"..\..\..\EndScreen.txt");
         string end = EndScreen.ReadToEnd();
-        Console.BufferHeight = Console.WindowHeight = 30;
-        Console.BufferWidth = Console.WindowWidth = 80;
+        Console.BufferHeight = Console.WindowHeight = 40;
+        Console.BufferWidth = Console.WindowWidth = 70;
         Console.Write(end);
 
         Environment.Exit(0);
