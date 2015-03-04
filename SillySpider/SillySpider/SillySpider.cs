@@ -14,12 +14,19 @@ struct Symbol
     public string str;
     public ConsoleColor color;
 }
+<<<<<<< HEAD
 
 // Exception to let the program know it has to start a new game
 public class ContinuePlaying : Exception { }
 // Exception to let the program know it has to end the game
 public class StopPlaying : Exception { }
 
+=======
+//Exception to let the program know it has to start a new game
+public class ContinuePlaying : Exception { }
+//Exception to let the program know it has to end the game
+public class StopPlaying : Exception { }
+>>>>>>> 1bfe9ae9b60548608f54f4d5a989b6fac6e4f3fc
 class Spider
 {
     // A variable which tells the program whether to continue
@@ -527,8 +534,12 @@ class Spider
                 Console.Write("GAME OVER");
                 Thread.Sleep((int)3000);
 
+<<<<<<< HEAD
                 // Getting results to file
                 Result(score);
+=======
+                Result(score);//---------------------------->>>>Getting results to file
+>>>>>>> 1bfe9ae9b60548608f54f4d5a989b6fac6e4f3fc
                 CompareResults();
                 Console.Clear();
 
