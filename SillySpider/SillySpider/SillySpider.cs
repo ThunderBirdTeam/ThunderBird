@@ -577,7 +577,6 @@ class Spider
                 string startScreen = startUp.ReadToEnd();
                 Console.BufferHeight = Console.WindowHeight = 40;
                 Console.BufferWidth = Console.WindowWidth = 70;
-                Console.Clear();
                 Console.Write(startScreen);
                 colorNumber++;
 
@@ -586,12 +585,15 @@ class Spider
                     colorNumber = 0;
                 }
                 Console.Write("                   Press ENTER to start playing!");
-                Thread.Sleep((int)(750));
+                Thread.Sleep((int)(500));
+                Console.Clear();
+
             }
         }
         while (Console.ReadKey(true).Key != ConsoleKey.Enter);
 
         // After ENTER is pressed, the player is promted to enter his name and start playing
+        
         do
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -612,7 +614,6 @@ class Spider
                 Thread.Sleep((int)500);
             }
         }
-
         // The player name cannot contain empty spaces or be more than 15 characters
         while (string.IsNullOrWhiteSpace(playerName) || playerName.Contains('\t') || playerName.Contains(' ') || playerName.Length > 15);
         Thread.Sleep((int)200);
