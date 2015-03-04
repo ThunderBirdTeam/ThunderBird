@@ -577,6 +577,7 @@ class Spider
                 string startScreen = startUp.ReadToEnd();
                 Console.BufferHeight = Console.WindowHeight = 40;
                 Console.BufferWidth = Console.WindowWidth = 70;
+                Console.Clear();
                 Console.Write(startScreen);
                 colorNumber++;
 
@@ -585,9 +586,7 @@ class Spider
                     colorNumber = 0;
                 }
                 Console.Write("                   Press ENTER to start playing!");
-                Thread.Sleep((int)(500));
-                Console.Clear();
-
+                Thread.Sleep((int)(750));
             }
         }
         while (Console.ReadKey(true).Key != ConsoleKey.Enter);
