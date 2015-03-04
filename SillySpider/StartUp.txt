@@ -32,8 +32,7 @@
         \ \ \/____|    ':;                 ;:"  |______\/ / /
          \ \/_____|     ';              ,;'     |_______\/ /
           \/______|_____|_____|_____|_____|_____|________\/ 
-          /         Use the arrow keys to move and        \
-                  collect as many flies as possible
-             If a rain drop falls on you, you lose a life!
-             
-                        Press ENTER to start!
+          /   Use the ARROW keys to move inside the web   \
+               and collect as many flies as possible!
+            If a rain drop falls on you, you lose a life!
+
