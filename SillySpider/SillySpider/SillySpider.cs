@@ -16,7 +16,9 @@ struct Symbol
 }
 class Spider
 {
+    // A variable which tells the program whether to continue
     private static bool keepPlaying = true;
+    // The player name
     private static string playerName;
     // Printing the rain, spider, flies and info
     static void PrintOnPosition(int x, int y, string str, ConsoleColor color)
@@ -227,7 +229,7 @@ class Spider
                     player.Play();
                 }
 
-                // Game over
+                // Game over keepPlaying is false -> exit the function
                 else
                 {
                     keepPlaying = false;
@@ -441,16 +443,18 @@ class Spider
 
             line = reader.ReadLine();
         }
+        // Creates a sorted dictionary by score, then by name from the last dictionary
         var sortedDict = scoreDict.OrderByDescending(w => w.Value)
-            .ThenBy(w => w.Key)
-            .ToDictionary(p => p.Key, p => p.Value);
+                                  .ThenBy(w => w.Key)
+                                  .ToDictionary(p => p.Key, p => p.Value);
+        // Keeps only 30 values in the dictionary to prevent using more memory than needed
         while (sortedDict.Count > 30)
         {
             sortedDict.Remove(sortedDict.Keys.Last());
         }
         // Close the resource after you've finished using it
         reader.Close();
-
+        // Erases the previous file and adds the elements of the dictionary to the file and saves it
         File.WriteAllText(@"..\..\AllPlayersScore.txt", String.Empty);
         StreamWriter newFile = new StreamWriter(@"..\..\AllPlayersScore.txt");
         using (newFile)
@@ -460,6 +464,7 @@ class Spider
                 newFile.WriteLine("{0} {1}", v.Key, v.Value);
             }
         }
+        // Finally prints the scoreboard element by element.
         Console.WriteLine("______________________________________________________________________");
         Console.SetCursorPosition(Console.WindowWidth / 2 - 6, Console.WindowHeight - 38 + lineNumber);
         Console.WriteLine("TOP SCORES");
@@ -498,6 +503,8 @@ class Spider
             flies = newListFlies;
 
             List<Symbol> newListDrops = MovingDrops(player, ref spider, ref lifes, ref score, rain, newListFlies);
+
+            // keepPlaying is false, therefore the game ends
             if (keepPlaying == false)
             {
                 SoundPlayer died = new SoundPlayer();
@@ -514,6 +521,9 @@ class Spider
                 Console.Clear();
                 PrintingResults();//------------------------>>Printing all players score
                 Thread.Sleep((int)1000);
+
+                // After the scoreboard the player is given a choice between continuing and exiting
+                // After his choice we exit the function
                 ConsoleKeyInfo pressedKey = new ConsoleKeyInfo();
                 do
                 {
@@ -544,6 +554,7 @@ class Spider
     // Loads up the Starting Screen and starts the game after ENTER is pressed
     private static void StartGame()
     {
+        // Prints teh StartUp screen in 4 changing colors until the player presses ENTER to start the game
         Console.CursorVisible = false;
         do
         {
@@ -579,6 +590,8 @@ class Spider
             }
         }
         while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+
+        // After ENTER is pressed, the player is promted to enter his name and start playing
         Console.ForegroundColor = ConsoleColor.Yellow;
         do
         {
@@ -592,6 +605,7 @@ class Spider
             Console.Write("                   Enter player name: ");
             playerName = Console.ReadLine();
         }
+        // The player name cannot contain empty spaces or be more than 15 characters
         while (string.IsNullOrWhiteSpace(playerName) || playerName.Contains('\t') || playerName.Contains(' ') || playerName.Length > 15);
         StartPlaying();
     }
