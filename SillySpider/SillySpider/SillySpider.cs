@@ -494,9 +494,6 @@ class Spider
 
             PrintStaticElementsPlayfield();
 
-            PrintOnPosition(3, 2, "Player: " + playerName, ConsoleColor.Yellow);//------------------------>>>>>>>>>>>>>Maria<<<<<<<<<<<<
-            PrintOnPosition(3, 3, "Score: " + score, ConsoleColor.Magenta);
-            PrintOnPosition(3, 4, "Lives: " + lifes, ConsoleColor.Green);
             RandomChanceFliesAndDrops(rain, flies, randomGenerator);
 
             List<Symbol> newListFlies = MovingFlies(ref spider, ref score, flies);
@@ -548,6 +545,10 @@ class Spider
 
             PrintingFlies(flies);
 
+            PrintOnPosition(3, 2, "Player: " + playerName, ConsoleColor.Yellow);//------------------------>>>>>>>>>>>>>Maria<<<<<<<<<<<<
+            PrintOnPosition(3, 3, "Score: " + score, ConsoleColor.Magenta);
+            PrintOnPosition(3, 4, "Lives: " + lifes, ConsoleColor.Green);
+
             spider = MovingAndPrintingSpider(spider);
         }
     }
@@ -592,9 +593,10 @@ class Spider
         while (Console.ReadKey(true).Key != ConsoleKey.Enter);
 
         // After ENTER is pressed, the player is promted to enter his name and start playing
-        Console.ForegroundColor = ConsoleColor.Yellow;
+        
         do
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Clear();
             StreamReader startUp2 = new StreamReader(@"..\..\..\StartUp.txt");
             string startScreen2 = startUp2.ReadToEnd();
@@ -604,9 +606,17 @@ class Spider
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("                   Enter player name: ");
             playerName = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(playerName) || playerName.Contains('\t') || playerName.Contains(' ') || playerName.Length > 15)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.SetCursorPosition(16, Console.WindowHeight - 2);
+                Console.Write("\r                   Enter player name: ");
+                Thread.Sleep((int)500);
+            }
         }
         // The player name cannot contain empty spaces or be more than 15 characters
         while (string.IsNullOrWhiteSpace(playerName) || playerName.Contains('\t') || playerName.Contains(' ') || playerName.Length > 15);
+        Thread.Sleep((int)200);
         StartPlaying();
     }
 
@@ -658,7 +668,6 @@ class Spider
             Console.Clear();
             StartGame();
         }
-
     }
     static void Main()
     {
