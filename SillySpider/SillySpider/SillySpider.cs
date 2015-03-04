@@ -14,6 +14,10 @@ struct Symbol
     public string str;
     public ConsoleColor color;
 }
+//Exception to let the program know it has to start a new game
+public class ContinuePlaying : Exception { }
+//Exception to let the program know it has to end the game
+public class StopPlaying : Exception { }
 class Spider
 {
     // A variable which tells the program whether to continue
@@ -216,10 +220,10 @@ class Spider
                 // Message that shows lives left
                 if (lifes >= 0)
                 {
-                    PrintOnPosition(spider.x, spider.y - 2, spider.str = "DIED!", spider.color = ConsoleColor.Blue);
-                    PrintOnPosition(spider.x, spider.y - 1, spider.str = string.Format("  {0}", lifes), spider.color = ConsoleColor.Blue);
-                    PrintOnPosition(spider.x, spider.y, spider.str = "lives", spider.color = ConsoleColor.Blue);
-                    PrintOnPosition(spider.x, spider.y + 1, spider.str = "left!", spider.color = ConsoleColor.Blue);
+                    PrintOnPosition(spider.x, spider.y - 2, spider.str = "DIED!", spider.color = ConsoleColor.Yellow);
+                    PrintOnPosition(spider.x, spider.y - 1, spider.str = string.Format("  {0}", lifes), spider.color = ConsoleColor.Yellow);
+                    PrintOnPosition(spider.x, spider.y, spider.str = "lives", spider.color = ConsoleColor.Yellow);
+                    PrintOnPosition(spider.x, spider.y + 1, spider.str = "left!", spider.color = ConsoleColor.Yellow);
 
                     Thread.Sleep(2000);
                     Console.Clear();
@@ -511,7 +515,7 @@ class Spider
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.SetCursorPosition(Console.WindowWidth / 2 - 5, Console.WindowHeight / 2 - 2);
                 Console.Write("GAME OVER");
-
+                Thread.Sleep((int)3000);
 
                 Result(score);//---------------------------->>>>Getting results to file
                 CompareResults();
@@ -527,14 +531,11 @@ class Spider
                     pressedKey = Console.ReadKey(true);
                     if (pressedKey.Key == ConsoleKey.Enter)
                     {
-                        keepPlaying = true;
-                        return;
+                        throw new ContinuePlaying();
                     }
                     else if (pressedKey.Key == ConsoleKey.Escape)
                     {
-                        keepPlaying = false;
-                        EndScreen();
-                        return;
+                        throw new StopPlaying();
                     }
                 }
                 while (pressedKey.Key != ConsoleKey.Enter && pressedKey.Key != ConsoleKey.Escape);
@@ -661,11 +662,19 @@ class Spider
         Random randomGenerator = new Random();
 
         // While cycle for the game itself
-        GameCycle(player, ref spider, ref lifes, ref score, ref rain, ref flies, randomGenerator);
-        if (keepPlaying == true)
+        try
+        {
+            GameCycle(player, ref spider, ref lifes, ref score, ref rain, ref flies, randomGenerator);
+        }
+        catch (ContinuePlaying)
         {
             Console.Clear();
+            keepPlaying = true;
             StartGame();
+        }
+        catch (StopPlaying)
+        {
+            EndScreen();
         }
     }
     static void Main()
