@@ -4,6 +4,7 @@ using System.IO;
 using System.Media;
 using System.Security;
 using System.Threading;
+using System.Linq;
 
 // Struct for printing each symbol
 struct Symbol
@@ -15,6 +16,8 @@ struct Symbol
 }
 class Spider
 {
+    private static bool keepPlaying = true;
+    private static string playerName;
     // Printing the rain, spider, flies and info
     static void PrintOnPosition(int x, int y, string str, ConsoleColor color)
     {
@@ -177,7 +180,7 @@ class Spider
     }
 
     // Moving Drops
-    private static List<Symbol> MovingDrops(SoundPlayer player, ref Symbol spider, ref int lifes, List<Symbol> rain, List<Symbol> newListFlies)
+    private static List<Symbol> MovingDrops(SoundPlayer player, ref Symbol spider, ref int lifes, ref int score, List<Symbol> rain, List<Symbol> newListFlies)
     {
         // Drops list
         List<Symbol> newListDrops = new List<Symbol>();
@@ -227,17 +230,7 @@ class Spider
                 // Game over
                 else
                 {
-                    SoundPlayer died = new SoundPlayer();
-                    PlaySound(@"..\..\..\Died.wav", died);
-                    died.Play();
-
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.SetCursorPosition(Console.WindowWidth / 2 - 5, Console.WindowHeight / 2 - 2);
-                    Console.Write("GAME OVER");
-                    Thread.Sleep((int)6000);
-
-                    //End Screen
-                    EndScreen();
+                    keepPlaying = false;
                 }
             }
         }
@@ -363,24 +356,182 @@ class Spider
         return player;
     }
 
+    //Method for storing results in file------------------>>Maria
+    private static void Result(int score)
+    {
+        string totalScore = score.ToString();
+        string[,] gameResult = new string[2, 1];
+        gameResult[0, 0] = playerName;
+        gameResult[1, 0] = totalScore;
+
+        // Create a StreamWriter instance
+        StreamWriter writer = new StreamWriter(@"..\..\currentPlayerScore.txt");
+        //Printing result
+        using (writer)
+        {
+            for (int row = 0; row < gameResult.GetLength(0); row++)
+            {
+                for (int col = 0; col < gameResult.GetLength(1); col++)
+                {
+                    writer.Write(gameResult[row, col] + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+    //Compare current result file with old one and joins them in new text file--------------------->Maria
+    private static void CompareResults()
+    {
+        System.Text.Encoding encodingCyr = System.Text.Encoding.GetEncoding(1251);
+
+        try
+        {
+            string fileOne = @"..\..\currentPlayerScore.txt";
+            StreamReader readOne = new StreamReader(fileOne, encodingCyr);
+
+
+            string readFileOne = "";
+            using (readOne)
+            {
+                readFileOne = readOne.ReadToEnd();
+            }
+
+            StreamWriter newFile = new StreamWriter(@"..\..\AllPlayersScore.txt", true, encodingCyr);
+
+            using (newFile)
+            {
+                newFile.WriteLine(readFileOne);
+
+            }
+
+            Console.WriteLine("Done!");
+        }
+        catch (FileLoadException)
+        {
+            Console.WriteLine("Files not found.");
+        }
+    }
+
+    //Method for printing the results ---------------------------------------->>>Maria<<<<<<<<<<<<<<<<<<<<<<<<<<<------------------
+    private static void PrintingResults()
+    {
+        // Create an instance of StreamReader to read from a file
+        StreamReader reader = new StreamReader(@"..\..\AllPlayersScore.txt");
+        var scoreDict = new Dictionary<string, int>();
+        int lineNumber = 0;
+
+        // Read first line from the text file
+        string line = reader.ReadLine();
+
+        // Read the other lines from the text file
+        while (line != null)
+        {
+            string[] lineSplit = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (scoreDict.ContainsKey(lineSplit[0]))
+            {
+                if (scoreDict[lineSplit[0]] < int.Parse(lineSplit[1]))
+                {
+                    scoreDict[lineSplit[0]] = int.Parse(lineSplit[1]);
+                }
+            }
+            else
+            {
+                scoreDict.Add(lineSplit[0], int.Parse(lineSplit[1]));
+            }
+
+            line = reader.ReadLine();
+        }
+        var sortedDict = scoreDict.OrderByDescending(w => w.Value)
+            .ThenBy(w => w.Key)
+            .ToDictionary(p => p.Key, p => p.Value);
+        while (sortedDict.Count > 30)
+        {
+            sortedDict.Remove(sortedDict.Keys.Last());
+        }
+        // Close the resource after you've finished using it
+        reader.Close();
+
+        File.WriteAllText(@"..\..\AllPlayersScore.txt", String.Empty);
+        StreamWriter newFile = new StreamWriter(@"..\..\AllPlayersScore.txt");
+        using (newFile)
+        {
+            foreach (var v in sortedDict)
+            {
+                newFile.WriteLine("{0} {1}", v.Key, v.Value);
+            }
+        }
+        Console.WriteLine("______________________________________________________________________");
+        Console.SetCursorPosition(Console.WindowWidth / 2 - 6, Console.WindowHeight - 38 + lineNumber);
+        Console.WriteLine("TOP SCORES");
+        Console.SetCursorPosition(Console.WindowWidth / 2 - 15, Console.WindowHeight - 36 + lineNumber);
+        Console.WriteLine("     Nickname      Score");
+        foreach (var t in sortedDict)
+        {
+            if (lineNumber < 30)
+            {
+                lineNumber++;
+                Console.SetCursorPosition(Console.WindowWidth / 2 - 15, Console.WindowHeight - 36 + lineNumber);
+                Console.WriteLine("{0:00} - {1,-15} {2}", lineNumber, t.Key, t.Value);
+            }
+        }
+        Console.SetCursorPosition(Console.WindowWidth / 2 - 28, Console.WindowHeight - 34 + lineNumber);
+        Console.WriteLine("Press ENTER to start a new game or ESC to end the game");
+        Console.WriteLine("______________________________________________________________________");
+
+    }
+
     // While cycle of the game
     private static void GameCycle(SoundPlayer player, ref Symbol spider, ref int lifes, ref int score, ref List<Symbol> rain, ref List<Symbol> flies, Random randomGenerator)
     {
-        while (true)
+        while (keepPlaying)
         {
             Console.Clear();
 
             PrintStaticElementsPlayfield();
 
+            PrintOnPosition(3, 2, "Player: " + playerName, ConsoleColor.Yellow);//------------------------>>>>>>>>>>>>>Maria<<<<<<<<<<<<
             PrintOnPosition(3, 3, "Score: " + score, ConsoleColor.Magenta);
             PrintOnPosition(3, 4, "Lives: " + lifes, ConsoleColor.Green);
-
             RandomChanceFliesAndDrops(rain, flies, randomGenerator);
 
             List<Symbol> newListFlies = MovingFlies(ref spider, ref score, flies);
             flies = newListFlies;
 
-            List<Symbol> newListDrops = MovingDrops(player, ref spider, ref lifes, rain, newListFlies);
+            List<Symbol> newListDrops = MovingDrops(player, ref spider, ref lifes, ref score, rain, newListFlies);
+            if (keepPlaying == false)
+            {
+                SoundPlayer died = new SoundPlayer();
+                PlaySound(@"..\..\..\Died.wav", died);
+                died.Play();
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(Console.WindowWidth / 2 - 5, Console.WindowHeight / 2 - 2);
+                Console.Write("GAME OVER");
+
+
+                Result(score);//---------------------------->>>>Getting results to file
+                CompareResults();
+                Console.Clear();
+                PrintingResults();//------------------------>>Printing all players score
+                Thread.Sleep((int)1000);
+                ConsoleKeyInfo pressedKey = new ConsoleKeyInfo();
+                do
+                {
+                    pressedKey = Console.ReadKey(true);
+                    if (pressedKey.Key == ConsoleKey.Enter)
+                    {
+                        keepPlaying = true;
+                        return;
+                    }
+                    else if (pressedKey.Key == ConsoleKey.Escape)
+                    {
+                        keepPlaying = false;
+                        EndScreen();
+                        return;
+                    }
+                }
+                while (pressedKey.Key != ConsoleKey.Enter && pressedKey.Key != ConsoleKey.Escape);
+            }
             rain = newListDrops;
 
             PrintingDrops(rain);
@@ -393,6 +544,7 @@ class Spider
     // Loads up the Starting Screen and starts the game after ENTER is pressed
     private static void StartGame()
     {
+        Console.CursorVisible = false;
         do
         {
             int colorNumber = 0;
@@ -420,11 +572,27 @@ class Spider
                 {
                     colorNumber = 0;
                 }
+                Console.Write("                   Press ENTER to start playing!");
                 Thread.Sleep((int)(500));
                 Console.Clear();
+
             }
         }
         while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        do
+        {
+            Console.Clear();
+            StreamReader startUp2 = new StreamReader(@"..\..\..\StartUp.txt");
+            string startScreen2 = startUp2.ReadToEnd();
+            Console.BufferHeight = Console.WindowHeight = 40;
+            Console.BufferWidth = Console.WindowWidth = 70;
+            Console.Write(startScreen2);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("                   Enter player name: ");
+            playerName = Console.ReadLine();
+        }
+        while (string.IsNullOrWhiteSpace(playerName) || playerName.Contains('\t') || playerName.Contains(' ') || playerName.Length > 15);
         StartPlaying();
     }
 
@@ -437,8 +605,8 @@ class Spider
         Console.BufferHeight = Console.WindowHeight = 40;
         Console.BufferWidth = Console.WindowWidth = 70;
         Console.Write(end);
-
-        Environment.Exit(0);
+        Console.SetCursorPosition(Console.WindowWidth / 2 - 15, Console.WindowHeight - 1);
+        return;
     }
 
     // Starts up the game
@@ -447,7 +615,6 @@ class Spider
         // Playing rain sound
         SoundPlayer player = new SoundPlayer(@"..\..\..\Storm.wav");
         player.PlayLooping();
-
         // Parameters of the playfield
         Console.BufferHeight = Console.WindowHeight = 40;
         Console.BufferWidth = Console.WindowWidth = 70;
@@ -456,7 +623,7 @@ class Spider
         Symbol spider = DefiningSpider();
 
         // LifeCounter and score
-        int lifes = 2;
+        int lifes = 0;
         int score = 0;
 
         // Creating list which will contain all falling drops
@@ -465,12 +632,19 @@ class Spider
         // Creating list which will contain all flies
         List<Symbol> flies = new List<Symbol>();
 
+        //Getting PlayerName------------------------------------------------------------------------->>>>>Maria<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         // RandomGenerator of all random needs
         Random randomGenerator = new Random();
 
         // While cycle for the game itself
         GameCycle(player, ref spider, ref lifes, ref score, ref rain, ref flies, randomGenerator);
-        Console.WriteLine(score);
+        if (keepPlaying == true)
+        {
+            Console.Clear();
+            StartGame();
+        }
+
     }
     static void Main()
     {
