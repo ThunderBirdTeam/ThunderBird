@@ -646,7 +646,7 @@ class Spider
         Symbol spider = DefiningSpider();
 
         // LifeCounter and score
-        int lifes = 0;
+        int lifes = 2;
         int score = 0;
 
         // Creating list which will contain all falling drops
