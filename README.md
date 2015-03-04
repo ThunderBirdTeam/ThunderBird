@@ -1,4 +1,4 @@
-﻿# ThunderBird
+﻿# ThunderBird Team
 C# Part II Teamwork Project
 
 The team presentation can be found here:
